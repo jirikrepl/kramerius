@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.EnvironmentConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 
@@ -42,6 +43,7 @@ public class KConfiguration {
 
     private Configuration findAllConfigurations() throws IOException {
         CompositeConfiguration allConfiguration = new CompositeConfiguration();
+        allConfiguration.addConfiguration(new EnvironmentConfiguration());
         try {
             Enumeration<URL> resources = this.getClass().getClassLoader().getResources("res/configuration.properties");
             while (resources.hasMoreElements()) {

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -43,6 +44,16 @@ public class KConfiguration {
 
     private Configuration findAllConfigurations() throws IOException {
         CompositeConfiguration allConfiguration = new CompositeConfiguration();
+
+        EnvironmentConfiguration environmentConfiguration = new EnvironmentConfiguration();
+        for (Iterator it = environmentConfiguration.getKeys(); it.hasNext();) {
+            String key = (String)it.next();
+            String value = environmentConfiguration.getString(key);
+            key.replaceAll("_", ".");
+            key.replaceAll("\\.\\.", "__");
+            allConfiguration.addProperty(key, value);
+        }
+
         allConfiguration.addConfiguration(new EnvironmentConfiguration());
         try {
             Enumeration<URL> resources = this.getClass().getClassLoader().getResources("res/configuration.properties");
